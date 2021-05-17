@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: moex-default
+
+datadir: C:/dev/barja-data/data
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: moex-default
+
+moex:
+  api:
+    securities:
+      base-url: https://iss.moex.com/iss/engines/stock/markets/shares/securities/
+      trades-url: /trades.xml
+      trades:
+        page-size: 5000
+        emitent-codes: GAZP,TRMK,VTBR,CHMF,SIBN,ROSN,SBER,BANEP,MRKP,TATNP,MAGN,PHOR,AFKS,AFLT,ALRS,CBOM,DSKY,FEES,FIVE,GMKN,HYDR,IRAO,LKOH,LNTA,LSRG,MGNT,MOEX,MTSS,NLMK,NVTK,PIKK,PLZL,POLY,RTKM,RUAL,SBERP,SNGS,SNGSP,TATN,TCSG,TRNFP,UPRO,YNDX,BANE,VSMO,MSRS
