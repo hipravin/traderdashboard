@@ -1,0 +1,76 @@
+spring:
+  profiles:
+    active: moex-default, local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+app:
+  loader:
+    storage-dir: C:/dev/moex-data/data
+
+---
+spring:
+  config:
+    activate:
+      on-profile: moex-default
+
+moex:
+  api:
+    securities:
+      base-url: https://iss.moex.com/iss/engines/stock/markets/shares/securities/
+      trades-sub-url: /trades.xml
+      trades:
+        page-size: 5000
+        emitent-codes:
+          - GAZP
+          - VTBR
+          - MRKP
+          - CHMF
+          - SIBN
+          - ROSN
+          - SBER
+          - FLOT
+          - ENRU
+          - BANEP
+          - TATNP
+          - PHOR
+          - TRMK
+          - MAGN
+          - AFKS
+          - AFLT
+          - ALRS
+          - CBOM
+          - DSKY
+          - FEES
+          - FIVE
+          - GMKN
+          - HYDR
+          - IRAO
+          - LKOH
+          - LNTA
+          - LSRG
+          - MGNT
+          - MOEX
+          - MTSS
+          - NLMK
+          - NVTK
+          - PIKK
+          - PLZL
+          - POLY
+          - RTKM
+          - RUAL
+          - SBERP
+          - SNGS
+          - SNGSP
+          - TATN
+          - TCSG
+          - TRNFP
+          - UPRO
+          - YNDX
+          - BANE
+          - VSMO
+          - MSRS

@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+</head>
+
+<body>
+
+<div class="diargam">
+    <svg id="mainsvg" width="1000" height="1000" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+
+        <circle cx="25" cy="75" r="20" stroke="black" fill="red" stroke-width="1"/>
+    </svg>
+</div>
+
+</body>
+<script>
+    let svgns = "http://www.w3.org/2000/svg";
+    let    container = document.getElementById( 'mainsvg' );
+    let r = 10;
+    let step = 1;
+
+    let delta = r + 10;
+
+    let cnt = 0;
+
+    for (let x = 0; x < 1000; x += delta) {
+        for (let y = 0; y < 1000; y += delta) {
+            var circle = document.createElementNS(svgns, 'circle');
+            circle.setAttributeNS(null, 'cx', x);
+            circle.setAttributeNS(null, 'cy', y);
+            circle.setAttributeNS(null, 'r', r);
+            circle.setAttributeNS(null, 'style', 'fill: blue; stroke: black; stroke-width: 1px;' );
+            container.appendChild(circle);
+
+            cnt++;
+        }
+    }
+    alert(cnt);
+
+    setInterval(() => {
+        Array.prototype.slice.call(document.getElementsByTagName("circle")).forEach((circle, index, arr) => {
+            let cy = circle.cy.animVal.value + step;
+            circle.setAttributeNS(null, 'cy', cy );
+        });
+    },  50);
+
+</script>
+
+
+</html>
