@@ -18,6 +18,7 @@ public class MoexApiProperties {
         private Long pageSize;
         private String subUrl;
         private List<String> emitentCodes;
+        private long maxPageNum;
 
         public String getSubUrl() {
             return subUrl;
@@ -41,6 +42,14 @@ public class MoexApiProperties {
 
         public void setEmitentCodes(List<String> emitentCodes) {
             this.emitentCodes = emitentCodes;
+        }
+
+        public long getMaxPageNum() {
+            return maxPageNum;
+        }
+
+        public void setMaxPageNum(long maxPageNum) {
+            this.maxPageNum = maxPageNum;
         }
     }
 

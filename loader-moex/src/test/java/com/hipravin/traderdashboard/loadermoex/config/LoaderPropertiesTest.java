@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles({"local"})
 class LoaderPropertiesTest {
     @Autowired
     LoaderProperties loaderProperties;
@@ -16,5 +16,7 @@ class LoaderPropertiesTest {
     @Test
     void testPropertiesLoaded() {
         assertEquals("C:/dev/moex-data/data", loaderProperties.getStorageDir());
+        assertEquals(1000, loaderProperties.getDelayBetweenEmitentLoadMs());
+        assertEquals(100, loaderProperties.getDelayBetweenMoexRequestsMs());
     }
 }

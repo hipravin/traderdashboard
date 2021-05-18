@@ -32,7 +32,8 @@ class MoexApiPropertiesTest {
         assertNotNull(tradesProperties);
 
         assertEquals(5000L, tradesProperties.getPageSize());
-        assertEquals(48, tradesProperties.getEmitentCodes().size());
+        assertEquals(50, tradesProperties.getEmitentCodes().size());
+        assertEquals(1000, tradesProperties.getMaxPageNum());
         assertTrue(tradesProperties.getEmitentCodes().contains("GAZP"));
 
         assertEquals("https://iss.moex.com/iss/engines/stock/markets/shares/securities/GAZP/trades.xml?start=15000",
