@@ -22,8 +22,8 @@ moex:
   api:
     securities:
       base-url: https://iss.moex.com/iss/engines/stock/markets/shares/securities/
-      trades-sub-url: /trades.xml
       trades:
+        sub-url: /trades.xml
         page-size: 5000
         emitent-codes:
           - GAZP

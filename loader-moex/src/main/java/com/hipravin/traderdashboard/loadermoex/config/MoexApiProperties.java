@@ -6,14 +6,26 @@ import java.util.List;
 
 @ConfigurationProperties(prefix = "moex.api.securities")
 public class MoexApiProperties {
-    private String tradesSubUrl;
     private String baseUrl;
 
     private TradesProperties trades;
 
+    public String buildTradesSinglePageUrl(String emitentCode, int pageNum) {
+        return baseUrl + emitentCode + trades.subUrl +  "?start=" + pageNum * trades.pageSize;
+    }
+
     public static class TradesProperties {
         private Long pageSize;
+        private String subUrl;
         private List<String> emitentCodes;
+
+        public String getSubUrl() {
+            return subUrl;
+        }
+
+        public void setSubUrl(String subUrl) {
+            this.subUrl = subUrl;
+        }
 
         public Long getPageSize() {
             return pageSize;
@@ -30,14 +42,6 @@ public class MoexApiProperties {
         public void setEmitentCodes(List<String> emitentCodes) {
             this.emitentCodes = emitentCodes;
         }
-    }
-
-    public String getTradesSubUrl() {
-        return tradesSubUrl;
-    }
-
-    public void setTradesSubUrl(String tradesSubUrl) {
-        this.tradesSubUrl = tradesSubUrl;
     }
 
     public String getBaseUrl() {
