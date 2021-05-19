@@ -58,6 +58,14 @@ class MoexFileStorageTest {
         BigDecimal treshhold4 = new BigDecimal("50000");
         assertEquals(26668, countFiltered(tradeList, t -> t.getValue().compareTo(treshhold4) > 0));//half or trades
         assertEquals(8_256_855_364L, sumValue(tradeList, t -> t.getValue().compareTo(treshhold4) > 0));
+
+        //some investigations
+        long distinctCounts = tradeList.stream().limit(10_000)
+                .map(Trade::getQuantity)
+                .distinct()
+                .count();
+
+        assertEquals(626, distinctCounts);
     }
 
     long countFiltered(List<Trade> trades, Predicate<? super Trade> tradePredicate) {
