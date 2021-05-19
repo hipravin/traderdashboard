@@ -1,11 +1,10 @@
-package com.hipravin.traderdashboard.loadermoex.loader;
+package com.hipravin.tradersdashboard;
 
 import com.hipravin.tradersdashboard.moex.model.Trade;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,13 +13,17 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@ActiveProfiles("test")
 class MoexFileStorageTest {
-    @Autowired
-    MoexFileStorage moexFileStorage;
+    static MoexApiXmlParser moexApiXmlParser;
+    static MoexFileStorage moexFileStorage;
+
+    @BeforeAll
+    static void setUp() throws JAXBException {
+        moexApiXmlParser = new MoexApiXmlParser();
+        moexFileStorage = new MoexFileStorage("src/test/resources/samples", moexApiXmlParser);
+    }
 
     @Test
     void loadNotFoundDayVtbr() throws IOException {

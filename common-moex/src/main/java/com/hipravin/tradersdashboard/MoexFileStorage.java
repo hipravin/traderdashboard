@@ -1,12 +1,9 @@
-package com.hipravin.traderdashboard.loadermoex.loader;
+package com.hipravin.tradersdashboard;
 
-import com.hipravin.traderdashboard.loadermoex.config.LoaderProperties;
-import com.hipravin.tradersdashboard.MoexApiXmlParser;
 import com.hipravin.tradersdashboard.moex.model.Trade;
 import com.hipravin.tradersdashboard.utils.ZipFileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,18 +23,17 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Service
 public class MoexFileStorage {
     private static final DateTimeFormatter DATE_FILENAME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final String ZIP_EXTENSION = ".ZIP";
 
     private static final Logger log = LoggerFactory.getLogger(MoexFileStorage.class);
 
-    private final LoaderProperties loaderProperties;
+    private final String storageDir;
     private final MoexApiXmlParser moexXmlParser;
 
-    public MoexFileStorage(LoaderProperties loaderProperties, MoexApiXmlParser moexXmlParser) {
-        this.loaderProperties = loaderProperties;
+    public MoexFileStorage(String storageDir, MoexApiXmlParser moexXmlParser) {
+        this.storageDir = storageDir;
         this.moexXmlParser = moexXmlParser;
     }
 
@@ -49,7 +45,7 @@ public class MoexFileStorage {
      * @return
      */
     public Stream<Trade> findTrades(String emitentCode, LocalDate forDate) throws IOException {
-        Path pageDir = Paths.get(loaderProperties.getStorageDir(), emitentCode, forDate.format(DATE_FILENAME_FORMAT));
+        Path pageDir = Paths.get(storageDir, emitentCode, forDate.format(DATE_FILENAME_FORMAT));
 
         if (!Files.isDirectory(pageDir)) {
             return Stream.empty();
@@ -90,7 +86,7 @@ public class MoexFileStorage {
     }
 
     public void storeSinglePage(String emitentCode, LocalDate now, int pageNum, String content) throws IOException {
-        Path pageDir = Paths.get(loaderProperties.getStorageDir(), emitentCode, now.format(DATE_FILENAME_FORMAT));
+        Path pageDir = Paths.get(storageDir, emitentCode, now.format(DATE_FILENAME_FORMAT));
         createDirectoryIfNotExists(pageDir);
 
         String tradeTimestampMark = firstTradeTimestamp(content)

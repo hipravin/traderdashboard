@@ -16,6 +16,5 @@ class MoexTradesLoaderIT {
     @Test
     void testLoadAllForTodayGazp() throws IOException {
         moexTradesLoader.loadAndStoreAllPagesForToday("GAZP", LocalDate.now());
-
     }
 }

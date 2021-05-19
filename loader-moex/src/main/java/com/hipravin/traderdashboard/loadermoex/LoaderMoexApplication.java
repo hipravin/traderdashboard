@@ -3,6 +3,7 @@ package com.hipravin.traderdashboard.loadermoex;
 import com.hipravin.traderdashboard.loadermoex.config.LoaderProperties;
 import com.hipravin.traderdashboard.loadermoex.config.MoexApiProperties;
 import com.hipravin.tradersdashboard.MoexApiXmlParser;
+import com.hipravin.tradersdashboard.MoexFileStorage;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -20,6 +21,11 @@ public class LoaderMoexApplication {
     @Bean
     MoexApiXmlParser moexApiXmlParser() throws JAXBException {
         return new MoexApiXmlParser();
+    }
+
+    @Bean
+    MoexFileStorage moexFileStorage(LoaderProperties loaderProperties) throws JAXBException {
+        return new MoexFileStorage(loaderProperties.getStorageDir(), moexApiXmlParser());
     }
 
     public static void main(String[] args) {

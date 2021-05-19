@@ -2,6 +2,7 @@ package com.hipravin.traderdashboard.loadermoex.loader;
 
 import com.hipravin.traderdashboard.loadermoex.config.LoaderProperties;
 import com.hipravin.traderdashboard.loadermoex.config.MoexApiProperties;
+import com.hipravin.tradersdashboard.MoexFileStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
