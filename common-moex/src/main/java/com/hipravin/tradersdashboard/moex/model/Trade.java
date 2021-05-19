@@ -24,10 +24,10 @@ public class Trade {
     private String buysell;
     private BigDecimal value;
 
-    public static Trade of(RowType row) {
 //        <row TRADENO="3080550458" TRADETIME="09:59:50" BOARDID="TQBR"
 //        SECID="AFKS" PRICE="17.774" QUANTITY="1" VALUE="1777.4" PERIOD="S"
 //        TRADETIME_GRP="959" SYSTIME="2020-01-27 09:59:50" BUYSELL="B" DECIMALS="3" />
+    public static Trade of(RowType row) {
         Trade trade = new Trade();
         trade.tradeno = Long.parseLong(row.getTRADENO());
         trade.tradetime = LocalTime.parse(row.getTRADETIME(), DateTimeFormatter.ISO_LOCAL_TIME);
@@ -139,6 +139,13 @@ public class Trade {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isBuy() {
+        return "B".equalsIgnoreCase(buysell);
+    }
+    public boolean isSell() {
+        return "S".equalsIgnoreCase(buysell);
     }
 
     @Override
