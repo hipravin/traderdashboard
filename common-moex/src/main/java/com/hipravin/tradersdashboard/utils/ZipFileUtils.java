@@ -15,7 +15,7 @@ public abstract class ZipFileUtils {
         Map<String, String> env = new HashMap<>();
 
         try (FileSystem zipfs = FileSystems.newFileSystem(URI.create("jar:" + zipFilePath.toUri().toString()), env)) {
-            Path pathInZipfile = zipfs.getPath("/GAZP-0-2020-11-24-09-59-57.xml");
+            Path pathInZipfile = zipfs.getPath(textFileNameInZip);
             return Files.readString(pathInZipfile, StandardCharsets.UTF_8);
         }
     }

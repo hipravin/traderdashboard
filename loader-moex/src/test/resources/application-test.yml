@@ -1,0 +1,4 @@
+app:
+  loader:
+    storage-dir: src/test/resources/samples
+

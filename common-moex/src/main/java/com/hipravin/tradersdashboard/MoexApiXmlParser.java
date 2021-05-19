@@ -3,6 +3,7 @@ package com.hipravin.tradersdashboard;
 import com.hipravin.tradersdashboard.moex.jaxb.DocumentType;
 import com.hipravin.tradersdashboard.moex.jaxb.RowType;
 import com.hipravin.tradersdashboard.moex.model.Trade;
+import com.hipravin.tradersdashboard.utils.ZipFileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,10 +32,30 @@ public class MoexApiXmlParser {
         return unmarshaller.unmarshal(new StreamSource(new StringReader(content)), DocumentType.class).getValue();
     }
 
-    public Stream<Trade> loadFromFilePlain(Path file) {
+    public Stream<Trade> loadTradesFromFile(Path file) {
+        if(file.toString().toLowerCase().endsWith(".zip")) {
+            return loadFromFileZip(file);
+        } else {
+            return loadFromFilePlain(file);
+        }
+    }
+
+    Stream<Trade> loadFromFilePlain(Path file) {
         try {
             log.debug("Loading from file: " + file);
             return loadFromContent(Files.readString(file, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw new IllegalStateException(e);
+        }
+    }
+
+    Stream<Trade> loadFromFileZip(Path file) {
+        try {
+            String content = ZipFileUtils.readStringFromZip(file, file.getFileName().toString().replaceAll("(?i)\\.zip", ".xml"));
+
+            log.debug("Loading from file: " + file);
+            return loadFromContent(content);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new IllegalStateException(e);

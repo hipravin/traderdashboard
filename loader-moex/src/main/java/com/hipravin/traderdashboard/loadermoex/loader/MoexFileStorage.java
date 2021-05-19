@@ -16,20 +16,77 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class MoexFileStorage {
     private static final DateTimeFormatter DATE_FILENAME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String ZIP_EXTENSION = ".ZIP";
+
     private static final Logger log = LoggerFactory.getLogger(MoexFileStorage.class);
 
-    private  final LoaderProperties loaderProperties;
+    private final LoaderProperties loaderProperties;
     private final MoexApiXmlParser moexXmlParser;
 
     public MoexFileStorage(LoaderProperties loaderProperties, MoexApiXmlParser moexXmlParser) {
         this.loaderProperties = loaderProperties;
         this.moexXmlParser = moexXmlParser;
+    }
+
+    /**
+     * Returns stream of all trades according given parameters.
+     *
+     * @param emitentCode
+     * @param forDate
+     * @return
+     */
+    public Stream<Trade> findTrades(String emitentCode, LocalDate forDate) throws IOException {
+        Path pageDir = Paths.get(loaderProperties.getStorageDir(), emitentCode, forDate.format(DATE_FILENAME_FORMAT));
+
+        if (!Files.isDirectory(pageDir)) {
+            return Stream.empty();
+        }
+
+        SortedMap<Integer, Path> tradePages = findTradePages(pageDir, emitentCode);
+
+        Stream<Trade> combined = tradePages.entrySet().stream()
+                .flatMap(e -> moexXmlParser.loadTradesFromFile(e.getValue()));
+
+        return combined;
+    }
+
+    private SortedMap<Integer, Path> findTradePages(Path pageDir, String emitentCode) throws IOException {
+        Pattern pagePattern = Pattern.compile("(?i)" + emitentCode + "-(\\d+)-.*.zip");//e.g. EMCODE-3-....zip
+        Predicate<String> pagePatternMatches = pagePattern.asMatchPredicate();
+
+        //[0->path0, 1-> path1, ...]
+        SortedMap<Integer, Path> zippedTradeFilePages = Files.list(pageDir)
+                .filter(Files::isRegularFile)
+                .filter(p -> pagePatternMatches.test(p.getFileName().toString()))
+                .filter(p -> p.getFileName().toString().toUpperCase().endsWith(ZIP_EXTENSION))
+                .collect(Collectors.toMap(
+                        p -> detectPageNumber(pagePattern, p.getFileName().toString()),
+                        Function.identity(),
+                        (p1, p2) -> p1, TreeMap::new));
+
+        return zippedTradeFilePages;
+    }
+
+    private static int detectPageNumber(Pattern pattern, String s) {
+        Matcher m = pattern.matcher(s);
+        if(m.find() && m.group(1) != null) {
+            return Integer.parseInt(m.group(1));
+        } else {
+            return -1;
+        }
     }
 
     public void storeSinglePage(String emitentCode, LocalDate now, int pageNum, String content) throws IOException {
@@ -57,38 +114,6 @@ public class MoexFileStorage {
         Stream<Trade> trades = moexXmlParser.loadFromContent(tradesPageContent);
         return trades.findFirst().map(Trade::getTimestamp);
     }
-
-//    public Stream<Path> findAll() throws IOException {
-//        PathMatcher xmlExtensionMatcher = FileSystems.getDefault().getPathMatcher("glob:**.xml");
-//
-//        return Files.find(Paths.get(dataDir), Integer.MAX_VALUE,
-//                (p, attr) -> xmlExtensionMatcher.matches(p) && attr.isRegularFile());
-//    }
-//
-//    public Stream<Path> find(Long lastModifiedAfter) throws IOException {
-//        PathMatcher xmlExtensionMatcher = FileSystems.getDefault().getPathMatcher("glob:**.xml");
-//
-//        return Files.find(Paths.get(dataDir), Integer.MAX_VALUE,
-//                (p, attr) -> xmlExtensionMatcher.matches(p)
-//                        && attr.isRegularFile()
-//                        && attr.lastModifiedTime().toMillis() > lastModifiedAfter);
-//    }
-//
-//    public Stream<Trade> findAllTrades() {
-//        try {
-//            return findAll().flatMap(f -> stockApiXmlParser.loadFromFile(f));
-//        } catch (IOException e) {
-//            throw new IllegalStateException("Failed to read trade repo: " + e.getMessage(), e);
-//        }
-//    }
-//
-//    public Stream<Trade> findTrades(Long lastModifiedAfter) {
-//        try {
-//            return find(lastModifiedAfter).flatMap(f -> stockApiXmlParser.loadFromFile(f));
-//        } catch (IOException e) {
-//            throw new IllegalStateException("Failed to read trade repo: " + e.getMessage(), e);
-//        }
-//    }
 
     private static void createDirectoryIfNotExists(Path path) throws IOException {
         if (!Files.isDirectory(path)) {
