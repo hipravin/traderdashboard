@@ -53,6 +53,19 @@ class TradeFrameUtilTest {
     }
 
     @Test
+    void test8k() throws IOException {
+        Stream<Trade> trades = moexFileStorage.findTrades("VTBR", sampleVtbrDate);
+        List<Trade> tradeList = trades.collect(Collectors.toList());
+
+        List<TradeFrame> tfs = TradeFrameUtil.mergeTradesToTradeFrames(tradeList.stream(),
+                sampleVtbrDate.atTime(9, 50),
+                sampleVtbrDate.atTime(23, 50),
+                Duration.ofMillis(6300));
+
+        assertEquals(8000, tfs.size());
+    }
+
+    @Test
     void testAllToSingleGroup() throws IOException {
         Stream<Trade> trades = moexFileStorage.findTrades("VTBR", sampleVtbrDate);
         List<Trade> tradeList = trades.collect(Collectors.toList());

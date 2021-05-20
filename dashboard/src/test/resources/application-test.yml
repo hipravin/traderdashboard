@@ -1,0 +1,3 @@
+app:
+  loader:
+    storage-dir: ../common-moex/src/test/resources/samples

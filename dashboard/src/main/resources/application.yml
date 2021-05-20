@@ -1,2 +1,17 @@
 server:
   port: 6007
+
+spring:
+  profiles:
+    active: local, swagger
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+app:
+  loader:
+    storage-dir: C:/dev/moex-data/data
+
