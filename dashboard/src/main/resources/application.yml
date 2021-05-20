@@ -14,4 +14,6 @@ spring:
 app:
   loader:
     storage-dir: C:/dev/moex-data/data
-
+logging:
+  level:
+    org.springframework: DEBUG
