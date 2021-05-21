@@ -1,5 +1,6 @@
 import React from 'react';
 import Theme from "../Theme";
+import ScreenUtils from "../ScreenUtils";
 
 class PriceLabel extends React.Component {
 
@@ -10,7 +11,7 @@ class PriceLabel extends React.Component {
         const sp = this.props.screenProps;
         const th = Theme.theme;
 
-        const labelx = this.priceToX(this.props.price, this.props.priceGrid, this.props.screenProps);
+        const labelx = ScreenUtils.priceToX(this.props.price, this.props.priceGrid, this.props.screenProps);
         const labely = sp.middleY;
 
         return (
@@ -21,12 +22,7 @@ class PriceLabel extends React.Component {
         );
     }
 
-    priceToX(price, priceGrid, screenProps) {
-        const padding = screenProps.padding;
-        const deltaPrice = priceGrid.maxPrice - priceGrid.minPrice;
-        const paddingWidth = screenProps.width - 2 * padding;
-        return padding + paddingWidth * ((price - priceGrid.minPrice) / deltaPrice);
-    }
+
 }
 
 export default PriceLabel;

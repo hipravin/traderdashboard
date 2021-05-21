@@ -25,21 +25,19 @@ public abstract class PriceUtil {
     public static PriceGridDto definePriceGrid(List<TradeFrame> tradeFrames) {
         if (!tradeFrames.isEmpty()) {
             BigDecimal minPrice = tradeGroupStream(tradeFrames)
-                    .filter(tg -> tg.getMinPrice() != null)
+                    .filter(tg -> tg.getMinPrice() != null && !tg.getMinPrice().equals(BigDecimal.ZERO))
                     .map(TradeGroup::getMinPrice)
                     .min(Comparator.comparing(Function.identity())).orElseThrow();
 
             BigDecimal maxPrice = tradeGroupStream(tradeFrames)
-                    .filter(tg -> tg.getMaxPrice() != null)
+                    .filter(tg -> tg.getMaxPrice() != null && !tg.getMaxPrice().equals(BigDecimal.ZERO))
                     .map(TradeGroup::getMaxPrice)
                     .max(Comparator.comparing(Function.identity())).orElseThrow();
 
             return definePriceGrid(minPrice, maxPrice);
-
         } else {
             return DEFAULT_EMPTY_GRID;
         }
-
     }
 
     public static Stream<TradeGroup> tradeGroupStream(List<TradeFrame> tradeFrames) {

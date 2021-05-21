@@ -27,6 +27,10 @@ public class TradeGroup {
         }
     }
 
+    public boolean isEmpty() {
+        return biggestTrade == null;
+    }
+
     public BigDecimal getMinPrice() {
         return minPrice;
     }

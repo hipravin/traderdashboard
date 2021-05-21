@@ -5,28 +5,29 @@ import com.hipravin.tradersdashboard.moex.model.TradeGroup;
 import java.math.BigDecimal;
 
 public class TradeGroupDto {
-    private BigDecimal minPrice = null;
-    private BigDecimal maxPrice = null;
-    private long totalQuantity = 0;
-    private BigDecimal totalValue = BigDecimal.ZERO;
+    private BigDecimal minPrice;
+    private BigDecimal maxPrice;
+    private long totalQuantity;
+    private BigDecimal totalValue;
     private TradeDto biggestTrade = null;
 
-    public static TradeGroupDto emptyTradeGroup() {
-        return new TradeGroupDto();
-    }
-
     public static TradeGroupDto of(TradeGroup tradeGroup) {
-        TradeGroupDto tradeGroupDto = new TradeGroupDto();
+        if (!tradeGroup.isEmpty()) {
 
-        tradeGroupDto.minPrice = tradeGroup.getMinPrice();
-        tradeGroupDto.maxPrice = tradeGroup.getMaxPrice();
-        tradeGroupDto.totalQuantity = tradeGroup.getTotalQuantity();
-        tradeGroupDto.totalValue = tradeGroup.getTotalValue();
-        if(tradeGroup.getBiggestTrade() != null) {
-            tradeGroupDto.biggestTrade = TradeDto.of(tradeGroup.getBiggestTrade());
+            TradeGroupDto tradeGroupDto = new TradeGroupDto();
+
+            tradeGroupDto.minPrice = tradeGroup.getMinPrice();
+            tradeGroupDto.maxPrice = tradeGroup.getMaxPrice();
+            tradeGroupDto.totalQuantity = tradeGroup.getTotalQuantity();
+            tradeGroupDto.totalValue = tradeGroup.getTotalValue();
+            if (tradeGroup.getBiggestTrade() != null) {
+                tradeGroupDto.biggestTrade = TradeDto.of(tradeGroup.getBiggestTrade());
+            }
+
+            return tradeGroupDto;
+        } else {
+            return null;
         }
-
-        return tradeGroupDto;
     }
 
     public BigDecimal getMinPrice() {

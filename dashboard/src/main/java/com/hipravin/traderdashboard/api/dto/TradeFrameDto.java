@@ -17,6 +17,7 @@ public class TradeFrameDto {
         TradeFrameDto tradeFrameDto = new TradeFrameDto();
         tradeFrameDto.tradetimeStart = tradeFrame.getTradetimeStart();
         tradeFrameDto.tradetimeEnd = tradeFrame.getTradetimeEnd();
+
         tradeFrameDto.buyTradeGroup = TradeGroupDto.of(tradeFrame.getBuyTradeGroup());
         tradeFrameDto.sellTradeGroup = TradeGroupDto.of(tradeFrame.getSellTradeGroup());
 
