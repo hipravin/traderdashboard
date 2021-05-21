@@ -28,6 +28,7 @@ class TradeFrameControllerTest {
 
         assertEquals(HttpStatus.OK, sampleVtbr.getStatusCode());
         assertNotNull(sampleVtbr.getBody());
+        System.out.println(sampleVtbr.getBody());
     }
 
     @Test

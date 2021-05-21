@@ -16,4 +16,4 @@ app:
     storage-dir: C:/dev/moex-data/data
 logging:
   level:
-    org.springframework: DEBUG
+    org.springframework: INFO

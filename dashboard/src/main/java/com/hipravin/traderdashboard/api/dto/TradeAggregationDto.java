@@ -1,9 +1,12 @@
 package com.hipravin.traderdashboard.api.dto;
 
+import com.hipravin.traderdashboard.util.PriceUtil;
 import com.hipravin.tradersdashboard.moex.model.TradeFrame;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TradeAggregationDto {
@@ -14,6 +17,8 @@ public class TradeAggregationDto {
 
     private long frameSizeMs;
     private List<TradeFrameDto> tradeFrames;
+
+    private PriceGridDto priceGrid;
 
     public TradeAggregationDto() {
     }
@@ -29,6 +34,8 @@ public class TradeAggregationDto {
         tradeAggregationDto.tradeFrames = tradeFrames.stream()
                 .map(TradeFrameDto::of)
                 .collect(Collectors.toList());
+
+        tradeAggregationDto.priceGrid = PriceUtil.definePriceGrid(tradeFrames);
 
         return tradeAggregationDto;
     }
@@ -63,6 +70,14 @@ public class TradeAggregationDto {
 
     public void setFrameSizeMs(long frameSizeMs) {
         this.frameSizeMs = frameSizeMs;
+    }
+
+    public PriceGridDto getPriceGrid() {
+        return priceGrid;
+    }
+
+    public void setPriceGrid(PriceGridDto priceGrid) {
+        this.priceGrid = priceGrid;
     }
 
     public List<TradeFrameDto> getTradeFrames() {
