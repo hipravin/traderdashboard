@@ -31,7 +31,7 @@ class App extends React.Component {
 
     componentDidMount() {
         const tradeService = new TradeService();
-        tradeService.loadTradeAggregates("VTBR", "2021-05-20", 6300)
+        tradeService.loadTradeAggregates("GAZP", "2021-05-21", 6300)
             .then(res => this.setState({tradeAgg: res}))
             .then(res => {
                 this.startAnimation();
@@ -101,56 +101,11 @@ class App extends React.Component {
 
                         {tfComponents}
 
-                        {/*<rect id="rect1" x="10" y="10" width="30" height="30" stroke="black" fill="transparent"*/}
-                        {/*      strokeWidth="5"/>*/}
-
-
-                        {/*<text x="20" y="35" className="small">Мой</text>*/}
-                        {/*<text x="60" y="35" className="heavy">кот</text>*/}
-                        {/*<text x="60" y="55" className="small">очень</text>*/}
-
-                        {/*<text x="100" y="55" className="Rrrrr">Сердит!</text>*/}
-
-                        {/*<rect x="60" y="10" rx="10" ry="10" width="30" height="30" stroke="black" fill="transparent"*/}
-                        {/*      strokeWidth="5"/>*/}
-
-                        {/*<circle cx="25" cy="75" r="20" stroke="red" fill="transparent" strokeWidth="5"/>*/}
-                        {/*<ellipse cx="75" cy="75" rx="20" ry="5" stroke="red" fill="transparent" strokeWidth="5"/>*/}
-
-                        {/*<line x1="10" x2="50" y1="110" y2="150" stroke="orange" fill="transparent" strokeWidth="5"/>*/}
-                        {/*<polyline points="60 110 65 120 70 115 75 130 80 125 85 140 90 135 95 150 100 145"*/}
-                        {/*          stroke="orange" fill="transparent" strokeWidth="5"/>*/}
-
-                        {/*<polygon points="50 160 55 180 70 180 60 190 65 205 50 195 35 205 40 190 30 180 45 180"*/}
-                        {/*         stroke="green" fill="transparent" strokeWidth="5"/>*/}
-
-                        {/*<path d="M20,230 Q40,205 50,230 T90,230" fill="none" stroke="blue" strokeWidth="5"/>*/}
                     </svg>
                 </div>
             </div>
         )
     }
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;

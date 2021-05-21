@@ -9,7 +9,8 @@ class ScreenUtils {
             "height": height,
             "middleX": width * 0.5,
             "middleY": height * 0.5,
-            "padding": padding
+            "padding": padding,
+            "valueLabelTreshold": 5
         };
     }
 

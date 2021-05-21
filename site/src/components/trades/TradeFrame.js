@@ -1,6 +1,7 @@
 import React from 'react';
 import Theme from "../Theme";
 import ScreenUtils from "../ScreenUtils";
+import TradeGroup from "./TradeGroup";
 
 class TradeFrame extends React.Component {
 
@@ -10,27 +11,26 @@ class TradeFrame extends React.Component {
     render() {
         const sp = this.props.screenProps;
 
-        if(this.props.tradeFrame.buyTradeGroup && this.props.tradeFrame.sellTradeGroup) {
+        const groups = [];
 
-            const btx = ScreenUtils.priceToX(this.props.tradeFrame.buyTradeGroup.minPrice, this.props.priceGrid, this.props.screenProps);
-            const stx = ScreenUtils.priceToX(this.props.tradeFrame.sellTradeGroup.minPrice, this.props.priceGrid, this.props.screenProps);
-            const yshift = ScreenUtils.xtimeonscreenToShift(this.props.tradeFrame.xtimeonscreen) + 10;
+        const yshift = ScreenUtils.xtimeonscreenToShift(this.props.tradeFrame.xtimeonscreen) + 10;
 
-            const ty = sp.middleY;
-            const rbuy = ScreenUtils.valueToRadius(this.props.tradeFrame.buyTradeGroup.totalValue);
-            const rsell = ScreenUtils.valueToRadius(this.props.tradeFrame.sellTradeGroup.totalValue);
-
-            return (
-                <g>
-                    <circle key="buy" cx={btx} cy={ty - yshift} r={rbuy} stroke="black" fill="green" strokeWidth="1"/>
-                    <circle key="sell" cx={stx} cy={ty + yshift} r={rsell} stroke="black" fill="red" strokeWidth="1"/>
-                </g>
-            );
-        } else {
-            return (
-                <g></g>
+        if (this.props.tradeFrame.buyTradeGroup) {
+            groups.push(
+                <TradeGroup key="buy" screenProps={this.props.screenProps} yshift={-yshift} buysell="B"
+                            tradeGroup={this.props.tradeFrame.buyTradeGroup} priceGrid={this.props.priceGrid}/>
             );
         }
+        if (this.props.tradeFrame.sellTradeGroup) {
+            groups.push(
+                <TradeGroup key="sell" screenProps = {this.props.screenProps} yshift={yshift} buysell="S"
+                            tradeGroup={this.props.tradeFrame.sellTradeGroup} priceGrid={this.props.priceGrid}/>
+            );
+        }
+
+        return (
+            groups
+        );
     }
 }
 

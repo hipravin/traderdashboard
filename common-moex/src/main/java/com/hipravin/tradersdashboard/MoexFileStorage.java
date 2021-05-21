@@ -54,7 +54,8 @@ public class MoexFileStorage {
         SortedMap<Integer, Path> tradePages = findTradePages(pageDir, emitentCode);
 
         Stream<Trade> combined = tradePages.entrySet().stream()
-                .flatMap(e -> moexXmlParser.loadTradesFromFile(e.getValue()));
+                .flatMap(e -> moexXmlParser.loadTradesFromFile(e.getValue()))
+                .filter(t -> !"SMAL".equalsIgnoreCase(t.getBoardid()));
 
         return combined;
     }
@@ -78,7 +79,7 @@ public class MoexFileStorage {
 
     private static int detectPageNumber(Pattern pattern, String s) {
         Matcher m = pattern.matcher(s);
-        if(m.find() && m.group(1) != null) {
+        if (m.find() && m.group(1) != null) {
             return Integer.parseInt(m.group(1));
         } else {
             return -1;
