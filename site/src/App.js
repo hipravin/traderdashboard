@@ -5,6 +5,8 @@ import PriceAxis from "./components/PriceAxis/PriceAxis";
 import TradeService from "./service/TradeService";
 import ScreenUtils from "./components/ScreenUtils";
 import TradeFrame from "./components/trades/TradeFrame";
+import notify from "./lib/notify";
+import Notifier from "./components/Notifier";
 
 class App extends React.Component {
 
@@ -31,10 +33,18 @@ class App extends React.Component {
 
     componentDidMount() {
         const tradeService = new TradeService();
-        tradeService.loadTradeAggregates("GAZP", "2021-05-21", 6300)
-            .then(res => this.setState({tradeAgg: res}))
+        notify("Loading started...");
+        tradeService.loadTradeAggregates("ENRU", "2021-05-21", 6300)
+            .then(res => {
+                notify("Loading comleted");
+                this.setState({tradeAgg: res})
+            })
             .then(res => {
                 this.startAnimation();
+            })
+            .catch(e => {
+                notify("Loading failed: " + e.toString());
+                console.log("Failed to load data: " + e);
             });
     }
 
@@ -68,7 +78,7 @@ class App extends React.Component {
             });
 
             this.state.tradeAgg.tradeFrames.filter(tf => {
-                return  tf.tradetimeEnd.getTime() < this.state.tradeAgg.start.getTime() + xtimePassed - timeonscreen
+                return tf.tradetimeEnd.getTime() < this.state.tradeAgg.start.getTime() + xtimePassed - timeonscreen
             }).forEach(tf => {
                 tf.visible = false;
                 tf.xtimeonscreen = (this.state.tradeAgg.start.getTime() + xtimePassed) - tf.tradetimeStart.getTime();
@@ -91,11 +101,13 @@ class App extends React.Component {
 
         return (
             <div className="maindiv">
+                <Notifier />
                 <div>
                     <svg className="mainsvg" width={screenProps.width} height={screenProps.height} version="1.1"
                          xmlns="http://www.w3.org/2000/svg">
 
-                        <text x="20" y="20" className="small">{this.xtime.toLocaleDateString() + " " + this.xtime.toLocaleTimeString()}</text>
+                        <text x="20" y="20"
+                              className="small">{this.xtime.toLocaleDateString() + " " + this.xtime.toLocaleTimeString()}</text>
 
                         <PriceAxis screenProps={screenProps} priceGrid={this.state.tradeAgg.priceGrid}/>
 

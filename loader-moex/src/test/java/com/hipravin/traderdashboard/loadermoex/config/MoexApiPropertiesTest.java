@@ -23,7 +23,7 @@ class MoexApiPropertiesTest {
         assertNotNull(tradesProperties);
 
         assertEquals(5000L, tradesProperties.getPageSize());
-        assertEquals(50, tradesProperties.getEmitentCodes().size());
+        assertEquals(51, tradesProperties.getEmitentCodes().size());
         assertEquals(1000, tradesProperties.getMaxPageNum());
         assertTrue(tradesProperties.getEmitentCodes().contains("GAZP"));
 

@@ -13,6 +13,7 @@ class TradeService {
             })
             .catch(e => {
                 console.log(e);
+                throw e;
             });
 
     // .then(res => {

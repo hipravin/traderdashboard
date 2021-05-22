@@ -48,10 +48,14 @@ public class MoexFileStorage {
         Path pageDir = Paths.get(storageDir, emitentCode, forDate.format(DATE_FILENAME_FORMAT));
 
         if (!Files.isDirectory(pageDir)) {
-            return Stream.empty();
+            throw new TradesNotFoundException(emitentCode, forDate);
         }
 
         SortedMap<Integer, Path> tradePages = findTradePages(pageDir, emitentCode);
+
+        if(tradePages.isEmpty()) {
+            throw new TradesNotFoundException(emitentCode, forDate);
+        }
 
         Stream<Trade> combined = tradePages.entrySet().stream()
                 .flatMap(e -> moexXmlParser.loadTradesFromFile(e.getValue()))
