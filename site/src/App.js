@@ -7,6 +7,7 @@ import ScreenUtils from "./components/ScreenUtils";
 import TradeFrame from "./components/trades/TradeFrame";
 import notify from "./lib/notify";
 import Notifier from "./components/Notifier";
+import ConfigPanel from "./components/ConfigPanel/ConfigPanel";
 
 class App extends React.Component {
 
@@ -20,10 +21,16 @@ class App extends React.Component {
         super(props);
         this.state = {
             tradeAgg: {
+                // priceGrid: {
+                //     minPrice: 27000,
+                //     maxPrice: 28000,
+                //     priceGrid: [27000.00, 27050.00, 27100.00, 27150.00, 27200.00, 27250.00, 27300.00, 27350.00, 27400.00, 27450.00, 27500.00, 27550.00, 27600.00, 27650.00, 27700.00, 27750.00, 27800.00, 27850.00, 27900.00, 27950.00, 28000.00],
+                //
+                // },
                 priceGrid: {
-                    minPrice: 27000,
-                    maxPrice: 28000,
-                    priceGrid: [27000.00, 27050.00, 27100.00, 27150.00, 27200.00, 27250.00, 27300.00, 27350.00, 27400.00, 27450.00, 27500.00, 27550.00, 27600.00, 27650.00, 27700.00, 27750.00, 27800.00, 27850.00, 27900.00, 27950.00, 28000.00],
+                    minPrice: 0.7000,
+                    maxPrice: 0.7100,
+                    priceGrid: [0.7000,0.7005,0.7010,0.7015,0.7020,0.7025,0.7030,0.7035,0.7040,0.7045,0.7050,0.7055,0.7060,0.7065,0.7070,0.7075,0.7080,0.7085,0.7090,0.7095,0.7100],
 
                 },
                 tradeFrames: []
@@ -31,10 +38,10 @@ class App extends React.Component {
         };
     }
 
-    componentDidMount() {
-        const tradeService = new TradeService();
+    handleConfigUpdate({emcode, daystring, framesize}) {
         notify("Loading started...");
-        tradeService.loadTradeAggregates("ENRU", "2021-05-21", 6300)
+        const tradeService = new TradeService();
+        tradeService.loadTradeAggregates(emcode, daystring, framesize)
             .then(res => {
                 notify("Loading comleted");
                 this.setState({tradeAgg: res})
@@ -46,6 +53,9 @@ class App extends React.Component {
                 notify("Loading failed: " + e.toString());
                 console.log("Failed to load data: " + e);
             });
+    }
+
+    componentDidMount() {
     }
 
     startAnimation() {
@@ -102,6 +112,7 @@ class App extends React.Component {
         return (
             <div className="maindiv">
                 <Notifier />
+                <ConfigPanel onConfigUpdate={this.handleConfigUpdate.bind(this)}/>
                 <div>
                     <svg className="mainsvg" width={screenProps.width} height={screenProps.height} version="1.1"
                          xmlns="http://www.w3.org/2000/svg">

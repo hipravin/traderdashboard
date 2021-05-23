@@ -49,12 +49,12 @@ public abstract class PriceUtil {
 
     public static PriceGridDto definePriceGrid(BigDecimal minPrice, BigDecimal maxPrice) {
         BigDecimal delta = maxPrice.subtract(minPrice);
-        if (delta.scale() >= 2) {
-            delta = delta.setScale(delta.scale() - 2, RoundingMode.UP);
-        }
-        if (minPrice.scale() >= 2) {
-            minPrice = minPrice.setScale(minPrice.scale() - 2, RoundingMode.DOWN);
-        }
+//        if (delta.scale() >= 1) {
+//            delta = delta.setScale(delta.scale() - 1, RoundingMode.UP);
+//        }
+//        if (minPrice.scale() >= 1) {
+//            minPrice = minPrice.setScale(minPrice.scale() - 1, RoundingMode.DOWN);
+//        }
         BigDecimal shift = delta.divide(new BigDecimal(STEPS), delta.scale() + 2, RoundingMode.CEILING);
 
         List<BigDecimal> priceGrid = new ArrayList<>();
