@@ -21,10 +21,6 @@ class ScreenUtils {
         return padding + paddingWidth * ((price - priceGrid.minPrice) / deltaPrice);
     }
 
-    static xtimeonscreenToShift(xtimeonscreen) {
-        return xtimeonscreen / 4000; //try 1 sec / pixel
-    }
-
     static valueToRadius(value, screenProps) {
         return Math.sqrt(value) / 100 + 1;
     }

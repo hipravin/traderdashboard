@@ -10,20 +10,17 @@ class TradeFrame extends React.Component {
 
     render() {
         const sp = this.props.screenProps;
-
         const groups = [];
-
-        const yshift = ScreenUtils.xtimeonscreenToShift(this.props.tradeFrame.xtimeonscreen) + 10;
 
         if (this.props.tradeFrame.buyTradeGroup) {
             groups.push(
-                <TradeGroup key="buy" screenProps={this.props.screenProps} yshift={-yshift} buysell="B"
+                <TradeGroup key="buy" screenProps={this.props.screenProps} yshift={-this.props.yshift} buysell="B"
                             tradeGroup={this.props.tradeFrame.buyTradeGroup} priceGrid={this.props.priceGrid}/>
             );
         }
         if (this.props.tradeFrame.sellTradeGroup) {
             groups.push(
-                <TradeGroup key="sell" screenProps = {this.props.screenProps} yshift={yshift} buysell="S"
+                <TradeGroup key="sell" screenProps = {this.props.screenProps} yshift={this.props.yshift} buysell="S"
                             tradeGroup={this.props.tradeFrame.sellTradeGroup} priceGrid={this.props.priceGrid}/>
             );
         }

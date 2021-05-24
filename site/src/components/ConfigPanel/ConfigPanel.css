@@ -1,17 +1,10 @@
 .configpanel {
     position: absolute;
-    top: 80%;
-    padding: 50px 50px;
+    top: 88%;
 
     display: flex;
     justify-content: center;
 
-    opacity: 0.3;
-
-}
-
-.configpanel:hover {
-    opacity: 1.0;
 }
 
 .configpanel .configelem {

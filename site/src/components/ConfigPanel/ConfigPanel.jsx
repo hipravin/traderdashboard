@@ -73,7 +73,6 @@ class ConfigPanel extends React.Component {
                         SelectProps={{
                             native: true,
                         }}
-                        helperText="Choose emitent"
                     >
                         {emitents.map((option) => (
                             <option key={option} value={option}>
@@ -92,7 +91,6 @@ class ConfigPanel extends React.Component {
                         SelectProps={{
                             native: true,
                         }}
-                        helperText="Select date"
                     >
                         {this.dateOptions.map((option) => (
                             <option key={option} value={option}>
@@ -112,7 +110,6 @@ class ConfigPanel extends React.Component {
                         SelectProps={{
                             native: true,
                         }}
-                        helperText="Select framesize"
                     >
                         {frameOptions.map((option) => (
                             <option key={option} value={option}>
