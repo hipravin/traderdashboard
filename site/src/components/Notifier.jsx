@@ -25,12 +25,13 @@ class Notifier extends React.Component {
   };
 
   openSnackbar = ({ message }) => {
+    console.log("Notify: " + message);
     this.setState({ open: true, message });
   };
 
   render() {
     const message = (
-      <span id="snackbar-message-id" dangerouslySetInnerHTML={{ __html: this.state.message }} />
+        <span id="snackbar-message-id">{this.state.message}</span>
     );
 
     return (

@@ -6,15 +6,18 @@ class TradeService {
 
         return fetch(this.apiBase + `/aggregation-daily/${emCode}/${daystring}?frame-size=${frameSize}`)
             .then((response) => {
-                return response.json();
+                if(response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Loading for ${emCode} ${daystring} ${frameSize} failed with status ${response.status} ${response.statusText}`)
+                }
             })
             .then(res => {
-                console.log("Got response: " + res);
                 this.parseDates(res);
                 return res;
             })
             .catch(e => {
-                console.log(e);
+                console.log(e.toString());
                 throw e;
             });
     }

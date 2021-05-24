@@ -1,6 +1,7 @@
 package com.hipravin.traderdashboard.util;
 
 import com.hipravin.traderdashboard.api.dto.PriceGridDto;
+import com.hipravin.tradersdashboard.TradesNotFoundException;
 import com.hipravin.tradersdashboard.moex.model.TradeFrame;
 import com.hipravin.tradersdashboard.moex.model.TradeGroup;
 
@@ -27,12 +28,17 @@ public abstract class PriceUtil {
             BigDecimal minPrice = tradeGroupStream(tradeFrames)
                     .filter(tg -> tg.getMinPrice() != null && !tg.getMinPrice().equals(BigDecimal.ZERO))
                     .map(TradeGroup::getMinPrice)
-                    .min(Comparator.comparing(Function.identity())).orElseThrow();
+                    .min(Comparator.comparing(Function.identity())).orElse(null);
 
             BigDecimal maxPrice = tradeGroupStream(tradeFrames)
                     .filter(tg -> tg.getMaxPrice() != null && !tg.getMaxPrice().equals(BigDecimal.ZERO))
                     .map(TradeGroup::getMaxPrice)
-                    .max(Comparator.comparing(Function.identity())).orElseThrow();
+                    .max(Comparator.comparing(Function.identity())).orElse(null);
+
+
+            if(minPrice == null || maxPrice == null) {
+                throw new TradesNotFoundException("No trades inside tradeframes");
+            }
 
             return definePriceGrid(minPrice, maxPrice);
         } else {
