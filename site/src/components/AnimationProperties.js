@@ -1,18 +1,16 @@
 import AnimationProgress from "./AnimationProgress";
 
 class AnimationProperties {
-    pixelsPerTradeFrame;
+    pixelsPerAnimationSecond;
     frameSizeMs;
     tradeFramesPerAnimationSecond;
+    tradeFramesPerTimeLabel;
 
-    tradeSecondsPerAnimationSeconds;
-
-    constructor({pixelsPerTradeFrame, frameSizeMs, tradeFramesPerAnimationSecond}) {
-        this.pixelsPerTradeFrame = pixelsPerTradeFrame;
+    constructor({pixelsPerAnimationSecond, frameSizeMs, tradeFramesPerAnimationSecond, tradeFramesPerTimeLabel}) {
+        this.pixelsPerAnimationSecond = pixelsPerAnimationSecond;
         this.frameSizeMs = frameSizeMs;
         this.tradeFramesPerAnimationSecond = tradeFramesPerAnimationSecond;
-
-        this.tradeSecondsPerAnimationSeconds = this.calcTradeSecondsPerAnimationSeconds();
+        this.tradeFramesPerTimeLabel = tradeFramesPerTimeLabel;
     }
 
     //tradeFramesPerTradeTime = (1000 / frameSizeMs)
@@ -21,8 +19,9 @@ class AnimationProperties {
     static defaultAnimationProperties() {
         return new AnimationProperties({
             frameSizeMs: 6000,
-            pixelsPerTradeFrame: 1,
-            tradeFramesPerAnimationSecond: 16
+            pixelsPerAnimationSecond: 10,
+            tradeFramesPerAnimationSecond: 16,
+            tradeFramesPerTimeLabel: 60
         });
     }
 
@@ -31,17 +30,22 @@ class AnimationProperties {
     }
 
     shouldShowTradeFrame(tradeStartTime, tradeTime, animationTimePassedMillis) {
-        return animationTimePassedMillis * this.tradeSecondsPerAnimationSeconds > (tradeTime.getTime() - tradeStartTime.getTime());
+        return animationTimePassedMillis * this.calcTradeSecondsPerAnimationSeconds() > (tradeTime.getTime() - tradeStartTime.getTime());
     }
 
     calcYShiftPx(tradeStartTime, tradeTime, animationTimePassedMillis) {
-        const framesPassed =
-            (animationTimePassedMillis * this.tradeSecondsPerAnimationSeconds - (tradeTime.getTime() - tradeStartTime.getTime())) / this.frameSizeMs;
-        return framesPassed * this.pixelsPerTradeFrame;
+        const secOnScreen =
+            (animationTimePassedMillis - (tradeTime.getTime() - tradeStartTime.getTime()) / this.calcTradeSecondsPerAnimationSeconds()) / 1000;
+        return secOnScreen * this.pixelsPerAnimationSecond;
     }
 
     calcCurrentTradeTime(tradeAggStart, animationProgress) {
-        return new Date(tradeAggStart.getTime() + animationProgress.getAnimationPassedMillis() * this.tradeSecondsPerAnimationSeconds);
+        return new Date(tradeAggStart.getTime() + animationProgress.getAnimationPassedMillis() * this.calcTradeSecondsPerAnimationSeconds());
+    }
+
+    getTimeLabelDivider() {
+        const divider =  this.tradeFramesPerTimeLabel; //time labels need big refactoring to avoid this trick
+        return divider <=1 ? 1 : Math.ceil(divider);
     }
 
 }

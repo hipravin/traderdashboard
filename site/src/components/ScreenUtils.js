@@ -1,6 +1,6 @@
 class ScreenUtils {
     static defineScreenProps() {
-        const width = window.innerWidth * 0.95;
+        const width = window.innerWidth * 0.9;
         const height = window.innerHeight * 0.95;
         const padding = window.innerHeight * 0.05;
 
