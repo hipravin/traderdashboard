@@ -112,8 +112,8 @@ class ConfigPanel extends React.Component {
                         }}
                     >
                         {frameOptions.map((option) => (
-                            <option key={option} value={option}>
-                                {option}
+                            <option key={option.value} value={option.value}>
+                                {option.label}
                             </option>
                         ))}
                     </TextField>
@@ -150,22 +150,60 @@ class ConfigPanel extends React.Component {
     }
 }
 
+
 const frameOptions = [
-    3000,
-    6000,
-    9000,
-    12000,
-    15000,
-    18000,
-    24000,
-    30000,
-    60000,
-    120000,
-    240000,
-    600000,
-    3600000,
-    3600000000
+    {   value: 3000,
+        label: "3s"
+    },
+    {   value: 6000,
+        label: "6s"
+    },
+    {   value: 12000,
+        label: "12s"
+    },
+    {   value: 30000,
+        label: "30s"
+    },
+    {   value: 60000,
+        label: "1m"
+    },
+    {   value: 120000,
+        label: "2m"
+    },
+    {   value: 300000,
+        label: "5m"
+    },
+    {   value: 600000,
+        label: "10m"
+    },
+    {   value: 1800000,
+        label: "30m"
+    },
+    {   value: 3600000,
+        label: "1h"
+    },
+    {   value: 36000000,
+        label: "10h"
+    }
 ];
+
+
+// const frameOptions = [
+//     3000,
+//     6000,
+//     9000,
+//     12000,
+//     15000,
+//     18000,
+//     24000,
+//     30000,
+//     60000,
+//     120000,
+//     240000,
+//     600000,
+//     3600000,
+//     3600000000
+// ];
 
 const emitents = ["GAZP"
     , "VTBR"

@@ -51,9 +51,10 @@ class App extends React.Component {
     initiallyStartAnimation() {
         console.log("Animation started");
         this.animationProgress.startAnimation();
-        this.animationInterval = setInterval(() => {
+
+        window.requestAnimationFrame(() => {
             this.animationTick();
-        }, 50);
+        });
     }
 
     animationTick() {
@@ -62,11 +63,16 @@ class App extends React.Component {
 
         if (this.isAfterAppearence(this.state.tradeAgg.end)) {
             console.log(`Animation completed after ${this.animationProgress.getAnimationPassedMillis()} ms`);
-            clearInterval(this.animationInterval);
         } else if (this.state.tradeAgg.start && this.state.tradeAgg.end) {
             const tradeAgg = this.state.tradeAgg;
             this.setState({tradeAgg: tradeAgg});
+
+            window.requestAnimationFrame(() => {
+                this.animationTick();
+            });
         }
+
+
     }
 
     render() {

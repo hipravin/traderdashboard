@@ -44,7 +44,7 @@ class AnimationProperties {
     }
 
     getTimeLabelDivider() {
-        const divider =  this.tradeFramesPerTimeLabel; //time labels need big refactoring to avoid this trick
+        const divider =  this.tradeFramesPerTimeLabel;
         return divider <=1 ? 1 : Math.ceil(divider);
     }
 
