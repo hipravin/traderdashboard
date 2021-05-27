@@ -19,8 +19,8 @@ class AnimationProperties {
     static defaultAnimationProperties() {
         return new AnimationProperties({
             frameSizeMs: 6000,
-            pixelsPerAnimationSecond: 10,
-            tradeFramesPerAnimationSecond: 16,
+            pixelsPerAnimationSecond: 12,
+            tradeFramesPerAnimationSecond: 20,
             tradeFramesPerTimeLabel: 60
         });
     }
