@@ -91,10 +91,14 @@ public class MoexFileStorage {
     }
 
     public void storeSinglePage(String emitentCode, LocalDate now, int pageNum, String content) throws IOException {
-        Path pageDir = Paths.get(storageDir, emitentCode, now.format(DATE_FILENAME_FORMAT));
+        Optional<ZonedDateTime> firstTradeZdtOptional = firstTradeTimestamp(content);
+        //date of loaded trades can differ from load date (now)
+        LocalDate firstTradeLocalDate = firstTradeZdtOptional.map(ZonedDateTime::toLocalDate).orElse(now);
+
+        Path pageDir = Paths.get(storageDir, emitentCode, firstTradeLocalDate.format(DATE_FILENAME_FORMAT));
         createDirectoryIfNotExists(pageDir);
 
-        String tradeTimestampMark = firstTradeTimestamp(content)
+        String tradeTimestampMark = firstTradeZdtOptional
                 .map(this::formatAsTimestampString)
                 .orElse(UUID.randomUUID().toString());
 

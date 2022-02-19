@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  loader:
+    build: ./loader-moex
+    image: hipravin/traderdashboard-loader
+    volumes:
+      - moex-data:/usr/local/moex-data:rw
+
+volumes:
+  moex-data:
+#  filebeat-data:
+#  elasticsearch-data:

@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  app:
+    build: ./dashboard
+    image: hipravin/traderdashboard-dashboard
+    ports:
+      - "6007:6007"
+    volumes:
+      - moex-data:/usr/local/moex-data:rw
+
+volumes:
+  moex-data:

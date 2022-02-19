@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles({"test"})
 class PriceUtilTest {
     @Autowired
     MoexFileStorage moexFileStorage;

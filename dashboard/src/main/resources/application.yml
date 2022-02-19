@@ -1,10 +1,6 @@
 server:
   port: 6007
 
-spring:
-  profiles:
-    active: local, swagger
-
 ---
 spring:
   config:
@@ -14,6 +10,19 @@ spring:
 app:
   loader:
     storage-dir: C:/dev/moex-data/data
+logging:
+  level:
+    org.springframework: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+app:
+  loader:
+    storage-dir: /usr/local/moex-data
 logging:
   level:
     org.springframework: INFO

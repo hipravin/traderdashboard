@@ -5,6 +5,22 @@ spring:
         - local
         - moex-default
         - loadall
+      dockerliveload:
+        - docker
+        - moex-default
+        - loadall
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+app:
+  loader:
+    storage-dir: /usr/local/moex-data
+    delayBetweenEmitentLoadMs: 1000
+    delayBetweenMoexRequestsMs: 100
 
 ---
 spring:
