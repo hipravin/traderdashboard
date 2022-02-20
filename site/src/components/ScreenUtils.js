@@ -22,7 +22,7 @@ class ScreenUtils {
     }
 
     static valueToRadius(value, screenProps) {
-        return Math.sqrt(value) / 100 + 1;
+        return Math.sqrt(value) / 150 + 1;
     }
 }
 

@@ -21,7 +21,7 @@ class TradeGroup extends React.Component {
 
         const valueMill = (this.props.tradeGroup.totalValue / 1000000).toFixed(0);
 
-        const circle = <circle cx={tx} cy={ty + yshift} r={r} stroke={buySellColor} fill="transparent"  strokeWidth="2"/>;
+        const circle = <circle cx={tx} cy={ty + yshift} r={r} stroke={buySellColor} fill="transparent"  strokeWidth="1"/>;
 
         if(valueMill >= sp.valueLabelTreshold) {
             return (
