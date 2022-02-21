@@ -11,6 +11,7 @@ import ConfigPanel from "./components/ConfigPanel/ConfigPanel";
 import AnimationProperties from "./components/AnimationProperties";
 import AnimationProgress from "./components/AnimationProgress";
 import TimeLabel from "./components/TimeAxis/TimeLabel";
+import StatisticPanel from "./components/StatisticPanel/StatisticPanel";
 
 class App extends React.Component {
 
@@ -20,10 +21,17 @@ class App extends React.Component {
     animationProgress = AnimationProgress.awaitAnimationStart();
     marginFromCenterY = 10;
 
+    //to not recalculate stats every tick
+    stats = {
+        visiblebuy: 0,
+        visiblesell: 0
+    };
+    stats_tick_rate = 10;
+    tick = 0;
+
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
     }
 
     handleConfigUpdate({emcode, daystring, framesize}) {
@@ -103,11 +111,35 @@ class App extends React.Component {
             this.animationProgress.getAnimationPassedMillis());
     }
 
+    calculateStats(visibleTradeFrames) {
+        const visibleBuyTotalValue = visibleTradeFrames
+            .filter(tf => tf.buyTradeGroup !== null)
+            .map(tf => tf.buyTradeGroup.totalValue)
+            .reduce((a, b) => a + b, 0);
+
+        const visibleSellTotalValue = visibleTradeFrames
+            .filter(tf => tf.sellTradeGroup !== null)
+            .map(tf => tf.sellTradeGroup.totalValue)
+            .reduce((a, b) => a + b, 0);
+
+        const stats = {
+            visiblebuy: visibleBuyTotalValue,
+            visiblesell: visibleSellTotalValue
+        }
+
+        return stats;
+    }
+
     renderTradeAgg() {
         const screenProps = ScreenUtils.defineScreenProps();
         const visibleTradeFrames = this.state.tradeAgg.tradeFrames.filter(tf => {
             return this.isAfterAppearence(tf.tradetimeStart) && this.yshiftForTradeFrame(tf.tradetimeStart) <= screenProps.height * 0.4;
         });
+
+        if (this.tick % this.stats_tick_rate === 0) {
+            this.stats = this.calculateStats(visibleTradeFrames);
+        }
+        this.tick++;
 
         const tfComponents = visibleTradeFrames.map(tf => {
             return <TradeFrame key={tf.tradetimeStart} screenProps={screenProps} tradeFrame={tf}
@@ -118,11 +150,12 @@ class App extends React.Component {
 
         const timeLabels = [];
         this.state.tradeAgg.tradeFrames.forEach((tf, idx, tfs) => {
-            if(idx % (this.animationProperties.getTimeLabelDivider()) === 0
+            if (idx % (this.animationProperties.getTimeLabelDivider()) === 0
                 && this.isAfterAppearence(tf.tradetimeStart) && this.yshiftForTradeFrame(tf.tradetimeStart) <= screenProps.height * 0.4) {
                 const timelabelString = (tf.tradetimeStart.toLocaleTimeString()).slice(0, 5);
                 timeLabels.push(
-                    <TimeLabel key={timelabelString} timestring={timelabelString} yshift={this.yshiftForTradeFrame(tf.tradetimeStart)}
+                    <TimeLabel key={timelabelString} timestring={timelabelString}
+                               yshift={this.yshiftForTradeFrame(tf.tradetimeStart)}
                                screenProps={screenProps}
                     />
                 );
@@ -133,6 +166,7 @@ class App extends React.Component {
             <div className="maindiv">
                 <Notifier/>
                 <ConfigPanel onConfigUpdate={this.handleConfigUpdate.bind(this)}/>
+                <StatisticPanel stats={this.stats}/>
                 <div>
                     <svg className="mainsvg" width={screenProps.width} height={screenProps.height} version="1.1"
                          xmlns="http://www.w3.org/2000/svg">

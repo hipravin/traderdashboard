@@ -1,7 +1,7 @@
 #cron pingalive
 * * * * * echo "cron is up `date -Iseconds`" > /var/log/cron-health.log 2>&1
-#run moex loader
-45 9,15,19,21,22,23 * * * java -jar /app.jar --spring.profiles.active=dockerliveload >/var/log/moex-load-`date +'%Y-%m-%d-%H-%M-%S'`.log 2>&1
+#run moex loader (UTC time)
+45 6,10,12,16,18,19,20 * * * java -jar /app.jar --spring.profiles.active=dockerliveload >/var/log/moex-load-`date +'%Y-%m-%d-%H-%M-%S'`.log 2>&1
 #housekeep old logs
-0 20 * * * find /var/log -name moex-load*.log -type f -mindepth 1 -mtime +7 -delete
+0 17 * * * find /var/log -name moex-load*.log -type f -mindepth 1 -mtime +7 -delete
 # remember to end this file with an empty new line

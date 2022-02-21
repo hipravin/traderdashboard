@@ -1,0 +1,23 @@
+.StatisticPanel {
+    position: absolute;
+    top: 77%;
+    left: 85%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.statblock {
+    display: flex;
+    flex-direction: column;
+
+    /*border: 1px solid black;*/
+}
+
+.buyamount {
+    color: green;
+}
+
+.sellamount {
+    color: red;
+}
