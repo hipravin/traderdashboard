@@ -51,7 +51,8 @@ public class TradeFrameController {
         LocalDate day = LocalDate.from(DATE_PARAM_FORMAT.parse(dayString));
         Stream<Trade> trades = moexFileStorage.findTrades(emCode, day);
 
-        LocalDateTime start = day.atTime(6, 50);
+//        LocalDateTime start = day.atTime(6, 50);
+        LocalDateTime start = day.atTime(9, 50);
         LocalDateTime end = day.atTime(23, 59);
 
         List<TradeFrame> frames = TradeFrameUtil.mergeTradesToTradeFrames(trades, start, end, Duration.ofMillis(frameSize));

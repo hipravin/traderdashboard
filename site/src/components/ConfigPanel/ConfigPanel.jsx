@@ -187,7 +187,8 @@ const frameOptions = [
     }
 ];
 
-const emitents = ["GAZP"
+const emitents = [
+    "GAZP"
     , "VTBR"
     , "MRKP"
     , "CHMF"
@@ -237,6 +238,7 @@ const emitents = ["GAZP"
     , "VSMO"
     , "MSRS"
     , "RASP"
+    , "RSTI"
     , "MTLR"]
 
 

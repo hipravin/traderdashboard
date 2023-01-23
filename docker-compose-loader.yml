@@ -6,7 +6,7 @@ services:
     image: hipravin/traderdashboard-loader
     volumes:
       - moex-data:/usr/local/moex-data:rw
-
+    restart: unless-stopped
 volumes:
   moex-data:
 #  filebeat-data:

@@ -8,6 +8,6 @@ services:
       - "6007:6007"
     volumes:
       - moex-data:/usr/local/moex-data:rw
-
+    restart: unless-stopped
 volumes:
   moex-data:
