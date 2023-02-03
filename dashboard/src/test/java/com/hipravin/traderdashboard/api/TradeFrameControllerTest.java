@@ -1,5 +1,6 @@
 package com.hipravin.traderdashboard.api;
 
+import com.hipravin.traderdashboard.api.dto.TradeAggregationDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,11 +24,12 @@ class TradeFrameControllerTest {
 
     @Test
     void testSampleVtbr() {
-        ResponseEntity<String> sampleVtbr =
-                restTemplate.getForEntity("http://localhost:" + port + "/api/v1/aggregation-daily/VTBR/2021-05-18", String.class);
+        ResponseEntity<TradeAggregationDto> sampleVtbr =
+                restTemplate.getForEntity("http://localhost:" + port + "/api/v1/aggregation-daily/VTBR/2021-05-18", TradeAggregationDto.class);
 
         assertEquals(HttpStatus.OK, sampleVtbr.getStatusCode());
         assertNotNull(sampleVtbr.getBody());
+        assertEquals(21, sampleVtbr.getBody().getPriceGrid().getPriceGrid().size());
     }
 
     @Test

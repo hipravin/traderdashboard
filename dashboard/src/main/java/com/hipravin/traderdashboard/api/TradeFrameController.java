@@ -1,6 +1,8 @@
 package com.hipravin.traderdashboard.api;
 
+import com.hipravin.traderdashboard.api.dto.PriceGridDto;
 import com.hipravin.traderdashboard.api.dto.TradeAggregationDto;
+import com.hipravin.traderdashboard.util.PriceUtil;
 import com.hipravin.tradersdashboard.MoexFileStorage;
 import com.hipravin.tradersdashboard.TradesNotFoundException;
 import com.hipravin.tradersdashboard.moex.model.Trade;
@@ -49,15 +51,16 @@ public class TradeFrameController {
         //TODO: separate this logic to service and consider preloading of frequently used
 
         LocalDate day = LocalDate.from(DATE_PARAM_FORMAT.parse(dayString));
-        Stream<Trade> trades = moexFileStorage.findTrades(emCode, day);
+        List<Trade> trades = moexFileStorage.findTrades(emCode, day).toList();
 
 //        LocalDateTime start = day.atTime(6, 50);
         LocalDateTime start = day.atTime(9, 50);
         LocalDateTime end = day.atTime(23, 59);
 
-        List<TradeFrame> frames = TradeFrameUtil.mergeTradesToTradeFrames(trades, start, end, Duration.ofMillis(frameSize));
+        List<TradeFrame> frames = TradeFrameUtil.mergeTradesToTradeFrames(trades.stream(), start, end, Duration.ofMillis(frameSize));
 
-        TradeAggregationDto result = TradeAggregationDto.of(emCode.toUpperCase(), start, end, frameSize, frames);
+        PriceGridDto priceGridDto = PriceUtil.definePriceGrid(trades, 20);
+        TradeAggregationDto result = TradeAggregationDto.of(emCode.toUpperCase(), start, end, frameSize, frames, priceGridDto);
 
         return ResponseEntity.ok(result);
     }

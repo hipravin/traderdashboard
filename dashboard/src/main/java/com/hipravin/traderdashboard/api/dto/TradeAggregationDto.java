@@ -24,7 +24,7 @@ public class TradeAggregationDto {
     }
 
     public static TradeAggregationDto of(String emCode, LocalDateTime start, LocalDateTime end, long frameSizeMs,
-                                         List<TradeFrame> tradeFrames) {
+                                         List<TradeFrame> tradeFrames, PriceGridDto priceGrid) {
         TradeAggregationDto tradeAggregationDto = new TradeAggregationDto();
         tradeAggregationDto.emCode = emCode;
         tradeAggregationDto.start = start;
@@ -35,7 +35,7 @@ public class TradeAggregationDto {
                 .map(TradeFrameDto::of)
                 .collect(Collectors.toList());
 
-        tradeAggregationDto.priceGrid = PriceUtil.definePriceGrid(tradeFrames);
+        tradeAggregationDto.priceGrid = priceGrid;
 
         return tradeAggregationDto;
     }

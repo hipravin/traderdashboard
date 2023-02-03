@@ -2,17 +2,18 @@ package com.hipravin.traderdashboard.util;
 
 import com.hipravin.traderdashboard.api.dto.PriceGridDto;
 import com.hipravin.tradersdashboard.TradesNotFoundException;
+import com.hipravin.tradersdashboard.moex.model.Trade;
 import com.hipravin.tradersdashboard.moex.model.TradeFrame;
 import com.hipravin.tradersdashboard.moex.model.TradeGroup;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Optional.ofNullable;
 
 public abstract class PriceUtil {
 
@@ -22,6 +23,45 @@ public abstract class PriceUtil {
 
     private PriceUtil() {
     }
+
+    public static PriceGridDto definePriceGrid(List<Trade> trades, int desiredLabelCount) {
+        if (trades.isEmpty()) {
+            return DEFAULT_EMPTY_GRID;
+        } else {
+            NavigableSet<BigDecimal> prices = trades.stream()
+                    .map(t -> t.getPrice())
+                    .collect(Collectors.toCollection(TreeSet::new));
+
+
+            SortedSet<BigDecimal> labelPrices = new TreeSet<>();
+
+            final BigDecimal minPrice = prices.first();
+            final BigDecimal maxPrice = prices.last();
+
+            BigDecimal delta = maxPrice.subtract(minPrice);
+            BigDecimal step = delta.divide(new BigDecimal(STEPS), delta.scale() + 4, RoundingMode.FLOOR);
+
+            labelPrices.add(minPrice);
+            labelPrices.add(maxPrice);
+
+            for (int i = 1; i < desiredLabelCount; i++) {
+                BigDecimal candidate = minPrice.add(step.multiply(BigDecimal.valueOf(i)));
+
+                BigDecimal neareastUp = ofNullable(prices.ceiling(candidate)).orElse(candidate);
+                BigDecimal neareastDown = ofNullable(prices.floor(candidate)).orElse(candidate);
+
+                BigDecimal deltaUp = neareastUp.subtract(candidate);
+                BigDecimal deltaDown = candidate.subtract(neareastDown);
+
+                BigDecimal nearest = deltaUp.compareTo(deltaDown) > 0 ? neareastDown : neareastUp;
+
+                labelPrices.add(nearest);
+            }
+
+            return new PriceGridDto(minPrice, maxPrice, new ArrayList<>(labelPrices));
+        }
+    }
+
 
     public static PriceGridDto definePriceGrid(List<TradeFrame> tradeFrames) {
         if (!tradeFrames.isEmpty()) {
@@ -36,7 +76,7 @@ public abstract class PriceUtil {
                     .max(Comparator.comparing(Function.identity())).orElse(null);
 
 
-            if(minPrice == null || maxPrice == null) {
+            if (minPrice == null || maxPrice == null) {
                 throw new TradesNotFoundException("No trades inside tradeframes");
             }
 
